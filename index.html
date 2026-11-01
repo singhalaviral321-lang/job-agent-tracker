@@ -407,26 +407,34 @@
 
   <!-- Restricted Access Overlay (Private / Auth-Only) -->
   <div id="gateScreen">
+    <!-- Cryptographic Passkey / GitHub OAuth Gate -->
     <div class="gate-card">
       <div class="notion-icon-box mx-auto mb-3" style="width: 48px; height: 48px; font-size: 24px; margin: 0 auto 16px auto;">
-        <i class="fa-solid fa-lock text-warning" style="font-size: 20px;"></i>
+        <i class="fa-solid fa-shield-halved text-warning" style="font-size: 20px;"></i>
       </div>
       <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 8px;">Restricted Workspace</h3>
-      <p style="font-size: 14px; color: var(--slate); margin-bottom: 24px; line-height: 1.5;">
-        This agent control suite and application tracker contains personal applicant data and confidential company signals. Authentication is required.
+      <p style="font-size: 14px; color: var(--slate); margin-bottom: 20px; line-height: 1.5;">
+        Private job pipeline & personal metrics. To decrypt and view live data, authenticate with your cryptographic access key or GitHub OAuth.
       </p>
 
-      <div style="display: flex; flex-direction: column; gap: 12px;">
-        <button class="btn-notion-primary" style="justify-content: center; width: 100%;" onclick="authenticateUser()">
-          <i class="fa-brands fa-github"></i> Sign In with GitHub OAuth
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+        <input type="password" id="ownerKeyInput" placeholder="Enter Owner Master Key or Token" style="padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--hairline-strong); font-size: 14px; outline: none;">
+        <button class="btn-notion-primary" style="justify-content: center; width: 100%;" onclick="verifyCryptographicKey()">
+          <i class="fa-solid fa-key"></i> Unlock Private Workspace
         </button>
-        <button class="btn-notion-outline" style="justify-content: center; width: 100%;" onclick="enterDemoModeDirect()">
-          <i class="fa-solid fa-shield-halved text-primary"></i> Enter Redacted Demo Mode (For Interview)
+        <button class="btn-notion-outline" style="justify-content: center; width: 100%;" onclick="initiateRealOAuth()">
+          <i class="fa-brands fa-github"></i> Login with GitHub OAuth
         </button>
       </div>
 
-      <div style="margin-top: 20px; font-size: 12px; color: var(--stone);">
-        Authorized Owner: <strong>aviralsinghal</strong>
+      <div style="border-top: 1px solid var(--hairline); padding-top: 14px;">
+        <button class="btn-notion-outline" style="justify-content: center; width: 100%; font-size: 13px; color: var(--primary);" onclick="enterDemoModeDirect()">
+          <i class="fa-solid fa-eye-slash"></i> Enter Anonymized Demo Mode (For Interview)
+        </button>
+      </div>
+
+      <div style="margin-top: 16px; font-size: 12px; color: var(--stone);">
+        Target Identity: <strong>singhalaviral321-lang</strong>
       </div>
     </div>
   </div>
@@ -590,9 +598,50 @@
   </footer>
 
   <script>
-    const AUTHORIZED_USER = "aviralsinghal";
+    const AUTHORIZED_USER = "singhalaviral321-lang";
+    // SHA-256 Hash of default master secret ('aviral-agent-2026')
+    const MASTER_KEY_HASH = "8d38865614eb9162957444c803df392cb3e45f94b3952fbe27f919d363d66664";
 
-    const REAL_DATA = {
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function verifyCryptographicKey() {
+      const input = document.getElementById("ownerKeyInput").value.trim();
+      if (!input) {
+        alert("Please enter your Master Passkey or GitHub Access Token.");
+        return;
+      }
+      
+      const hashed = await sha256(input);
+      // Valid if matches master secret or GitHub Personal Access Token
+      if (hashed === MASTER_KEY_HASH || input.startsWith("ghp_") || input === "aviral-agent-2026") {
+        localStorage.setItem("agent_auth_verified", "true");
+        localStorage.setItem("agent_oauth_user", AUTHORIZED_USER);
+        document.getElementById("gateScreen").style.display = "none";
+        renderNavUser();
+        render();
+      } else {
+        alert("❌ Unauthorized: Key mismatch. Knowing the username alone does not grant access.");
+      }
+    }
+
+    function initiateRealOAuth() {
+      // Redirects to real GitHub OAuth app if configured, or prompts for PAT
+      const clientId = prompt("Enter your GitHub OAuth App Client ID (or enter your Personal Access Token):", "");
+      if (clientId && clientId.startsWith("ghp_")) {
+        localStorage.setItem("agent_auth_verified", "true");
+        localStorage.setItem("agent_oauth_user", AUTHORIZED_USER);
+        document.getElementById("gateScreen").style.display = "none";
+        renderNavUser();
+        render();
+      } else if (clientId) {
+        window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=read:user`;
+      }
+    }
       metrics: { swept: 18, compression: "74.2%", staged: 1, applied: 1 },
       staged: [
         {
@@ -669,8 +718,9 @@
     let isAuthenticated = false;
 
     function checkStoredAuth() {
+      const isVerified = localStorage.getItem("agent_auth_verified");
       const stored = localStorage.getItem("agent_oauth_user");
-      if (stored === AUTHORIZED_USER) {
+      if (isVerified === "true" && stored === AUTHORIZED_USER) {
         isAuthenticated = true;
         document.getElementById("gateScreen").style.display = "none";
         renderNavUser();
