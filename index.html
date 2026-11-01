@@ -10,33 +10,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    /* DESIGN-notion.md Design System Tokens */
+    /* DESIGN-notion.md Tokens */
     :root {
       --primary: #5645d4;
       --primary-pressed: #4534b3;
-      --primary-deep: #3a2a99;
       --on-primary: #ffffff;
       --brand-navy: #0a1530;
       --brand-navy-deep: #070f24;
-      --brand-navy-mid: #1a2a52;
       --link-blue: #0075de;
-      
       --brand-orange: #dd5b00;
       --brand-orange-deep: #793400;
       --brand-green: #1aae39;
-      --brand-purple: #7b3ff2;
       --brand-purple-800: #391c57;
       
-      /* Card Tints */
       --card-tint-peach: #ffe8d4;
-      --card-tint-rose: #fde0ec;
       --card-tint-mint: #d9f3e1;
       --card-tint-lavender: #e6e0f5;
       --card-tint-sky: #dcecfa;
-      --card-tint-yellow: #fef7d6;
       --card-tint-yellow-bold: #f9e79f;
-      --card-tint-cream: #f8f5e8;
-      --card-tint-gray: #f0eeec;
       
       --canvas: #ffffff;
       --surface: #f6f5f4;
@@ -51,11 +42,10 @@
       --slate: #5d5b54;
       --steel: #787671;
       --stone: #a4a097;
-      --muted: #bbb8b1;
       
       --radius-sm: 6px;
-      --radius-md: 8px; /* Notion rectangular buttons & inputs */
-      --radius-lg: 12px; /* Notion cards */
+      --radius-md: 8px;
+      --radius-lg: 12px;
       --radius-full: 9999px;
     }
 
@@ -65,10 +55,9 @@
       background-color: var(--canvas);
       color: var(--ink);
       line-height: 1.55;
-      -webkit-font-smoothing: antialiased;
     }
 
-    /* Notion Promo Banner */
+    /* Promo Banner */
     .notion-promo-banner {
       background-color: var(--brand-navy-deep);
       color: #e2e8f0;
@@ -78,11 +67,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .notion-promo-banner a { color: #a5b4fc; text-decoration: none; }
 
-    /* Top Sticky Navigation */
+    /* Nav */
     .notion-nav {
       position: sticky;
       top: 0;
@@ -117,24 +104,12 @@
       font-size: 17px;
     }
 
-    /* Notion Hero Band (Navy) */
+    /* Hero */
     .notion-hero {
       background-color: var(--brand-navy);
       color: white;
       padding: 56px 32px 72px 32px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .notion-hero::before {
-      content: "";
-      position: absolute;
-      top: -100px;
-      left: 10%;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(86, 69, 212, 0.25) 0%, rgba(10, 21, 48, 0) 70%);
-      pointer-events: none;
     }
     .hero-pill-badge {
       display: inline-flex;
@@ -150,7 +125,7 @@
       margin-bottom: 20px;
     }
     .hero-title {
-      font-size: 42px;
+      font-size: 40px;
       font-weight: 600;
       letter-spacing: -1.2px;
       line-height: 1.15;
@@ -160,14 +135,13 @@
       margin-right: auto;
     }
     .hero-subtitle {
-      font-size: 17px;
+      font-size: 16px;
       color: var(--stone);
       max-width: 680px;
       margin: 0 auto 28px auto;
-      line-height: 1.5;
     }
 
-    /* Notion Buttons (Sober Rectangles: 8px radius) */
+    /* Buttons */
     .btn-notion-primary {
       background-color: var(--primary);
       color: var(--on-primary);
@@ -181,30 +155,13 @@
       align-items: center;
       gap: 8px;
       text-decoration: none;
-      transition: background-color 0.15s ease;
     }
     .btn-notion-primary:hover { background-color: var(--primary-pressed); color: white; }
-
-    .btn-notion-secondary-dark {
-      background-color: transparent;
-      color: white;
-      font-size: 14px;
-      font-weight: 500;
-      border-radius: var(--radius-md);
-      padding: 10px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-    .btn-notion-secondary-dark:hover { background-color: rgba(255, 255, 255, 0.08); }
 
     .btn-notion-outline {
       background-color: transparent;
       color: var(--ink);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       border-radius: var(--radius-md);
       padding: 8px 14px;
@@ -217,7 +174,7 @@
     }
     .btn-notion-outline:hover { background-color: var(--surface); }
 
-    /* Notion Embedded Workspace Mockup Card (Elevation Level 3) */
+    /* Mockup Card */
     .workspace-mockup-wrapper {
       max-width: 1200px;
       margin: -36px auto 0 auto;
@@ -233,7 +190,7 @@
       overflow: hidden;
     }
 
-    /* Stat Tiles Bar (Echoing Notion's Database Properties) */
+    /* Stats Grid */
     .notion-stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -251,9 +208,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
     .stat-number {
       font-size: 26px;
@@ -267,19 +221,18 @@
       margin-top: 2px;
     }
 
-    /* Notion Section Banner */
     .notion-yellow-banner {
       background-color: var(--card-tint-yellow-bold);
       color: var(--charcoal);
       border-radius: var(--radius-lg);
-      padding: 20px 24px;
-      margin: 24px 32px 0 32px;
+      padding: 16px 20px;
+      margin: 20px 32px 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    /* Database Table View */
+    /* Table */
     .notion-db-container {
       padding: 24px 32px 48px 32px;
     }
@@ -303,9 +256,6 @@
       padding: 6px 12px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
     .db-tab.active {
       color: var(--ink-deep);
@@ -331,54 +281,19 @@
       border-bottom: 1px solid var(--hairline-soft);
       vertical-align: top;
     }
-    .notion-table tr:hover td {
-      background-color: rgba(246, 245, 244, 0.4);
-    }
 
-    /* Notion Database Property Tags */
-    .tag-purple {
-      background-color: var(--card-tint-lavender);
-      color: var(--brand-purple-800);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-    }
-    .tag-green {
-      background-color: var(--card-tint-mint);
-      color: var(--brand-green);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-    }
-    .tag-peach {
-      background-color: var(--card-tint-peach);
-      color: var(--brand-orange-deep);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-    }
-    .tag-sky {
-      background-color: var(--card-tint-sky);
-      color: var(--link-blue);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-    }
+    /* Tags */
+    .tag-purple { background-color: var(--card-tint-lavender); color: var(--brand-purple-800); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-sm); }
+    .tag-green { background-color: var(--card-tint-mint); color: var(--brand-green); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-sm); }
+    .tag-peach { background-color: var(--card-tint-peach); color: var(--brand-orange-deep); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-sm); }
+    .tag-sky { background-color: var(--card-tint-sky); color: var(--link-blue); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-sm); }
 
-    /* Private Access Gate Screen */
+    /* GitHub OAuth Login Gate Screen */
     #gateScreen {
       position: fixed;
       inset: 0;
-      background: rgba(10, 21, 48, 0.95);
-      backdrop-filter: blur(12px);
+      background: rgba(10, 21, 48, 0.96);
+      backdrop-filter: blur(16px);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -389,68 +304,56 @@
       background-color: var(--canvas);
       border-radius: var(--radius-lg);
       padding: 40px;
-      max-width: 460px;
+      max-width: 480px;
       width: 100%;
       text-align: center;
-      box-shadow: rgba(0, 0, 0, 0.3) 0 20px 40px;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .notion-stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-title { font-size: 32px; }
-      .workspace-mockup-wrapper { margin-top: 16px; }
+      box-shadow: rgba(0, 0, 0, 0.35) 0 24px 48px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Restricted Access Overlay (Private / Auth-Only) -->
+  <!-- Mandatory Real GitHub OAuth / Identity Gate Screen -->
   <div id="gateScreen">
-    <!-- Cryptographic Passkey / GitHub OAuth Gate -->
     <div class="gate-card">
-      <div class="notion-icon-box mx-auto mb-3" style="width: 48px; height: 48px; font-size: 24px; margin: 0 auto 16px auto;">
-        <i class="fa-solid fa-shield-halved text-warning" style="font-size: 20px;"></i>
+      <div class="notion-icon-box mx-auto mb-3" style="width: 52px; height: 52px; font-size: 26px; margin: 0 auto 16px auto;">
+        <i class="fa-brands fa-github"></i>
       </div>
-      <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 8px;">Restricted Workspace</h3>
-      <p style="font-size: 14px; color: var(--slate); margin-bottom: 20px; line-height: 1.5;">
-        Private job pipeline & personal metrics. To decrypt and view live data, authenticate with your cryptographic access key or GitHub OAuth.
+      <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 8px;">Restricted Job Workspace</h3>
+      <p style="font-size: 14px; color: var(--slate); margin-bottom: 24px; line-height: 1.5;">
+        Private job pipeline & personal metrics. To access real company data and live application controls, authenticate via <strong>GitHub OAuth</strong>. Only <strong>singhalaviral321-lang</strong> is granted access.
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
-        <input type="password" id="ownerKeyInput" placeholder="Enter Owner Master Key or Token" style="padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--hairline-strong); font-size: 14px; outline: none;">
-        <button class="btn-notion-primary" style="justify-content: center; width: 100%;" onclick="verifyCryptographicKey()">
-          <i class="fa-solid fa-key"></i> Unlock Private Workspace
+        <button id="ghLoginBtn" class="btn-notion-primary" style="justify-content: center; width: 100%; padding: 12px;" onclick="authenticateWithGitHub()">
+          <i class="fa-brands fa-github"></i> Authorize with GitHub (Official OAuth)
         </button>
-        <button class="btn-notion-outline" style="justify-content: center; width: 100%;" onclick="initiateRealOAuth()">
-          <i class="fa-brands fa-github"></i> Login with GitHub OAuth
+
+        <div style="font-size: 12px; color: var(--stone); margin: 4px 0;">— OR FOR INTERVIEWERS —</div>
+
+        <button class="btn-notion-outline" style="justify-content: center; width: 100%; font-size: 13px;" onclick="enterDemoModeDirect()">
+          <i class="fa-solid fa-shield-halved text-primary"></i> Enter Redacted Demo Mode (Proof Only)
         </button>
       </div>
 
-      <div style="border-top: 1px solid var(--hairline); padding-top: 14px;">
-        <button class="btn-notion-outline" style="justify-content: center; width: 100%; font-size: 13px; color: var(--primary);" onclick="enterDemoModeDirect()">
-          <i class="fa-solid fa-eye-slash"></i> Enter Anonymized Demo Mode (For Interview)
-        </button>
-      </div>
-
-      <div style="margin-top: 16px; font-size: 12px; color: var(--stone);">
-        Target Identity: <strong>singhalaviral321-lang</strong>
+      <div id="authStatusAlert" style="font-size: 12px; color: var(--steel); margin-top: 10px;">
+        Required GitHub Identity: <strong>singhalaviral321-lang</strong>
       </div>
     </div>
   </div>
 
-  <!-- Promo Banner -->
+  <!-- Notion Promo Banner -->
   <div class="notion-promo-banner">
     <div>
-      <span class="tag-purple" style="font-size: 11px; margin-right: 8px;">RESTRICTED</span>
+      <span class="tag-purple" style="font-size: 11px; margin-right: 8px;">OAUTH PROTECTED</span>
       <span>Autonomous Job Agent Ops — Verified B2C PM Sweep & Tracker</span>
     </div>
     <div id="authStatusText">
-      <a href="#" onclick="showAuthPrompt()">Owner Sign-in Required</a>
+      <span style="color: var(--stone);">Awaiting GitHub Authentication...</span>
     </div>
   </div>
 
-  <!-- Sticky Notion Top Navigation -->
+  <!-- Sticky Notion Top Nav -->
   <nav class="notion-nav">
     <a href="#" class="nav-brand">
       <div class="notion-icon-box">A</div>
@@ -458,7 +361,7 @@
     </a>
 
     <div style="display: flex; align-items: center; gap: 16px;">
-      <!-- Demo Mode Switch -->
+      <!-- Demo Mode Switcher -->
       <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: var(--radius-md); border: 1px solid var(--hairline);">
         <input type="checkbox" id="demoCheckbox" style="cursor: pointer;" onchange="toggleDemoMode()">
         <label for="demoCheckbox" style="font-size: 13px; font-weight: 500; color: var(--charcoal); cursor: pointer;">
@@ -481,43 +384,34 @@
     <p class="hero-subtitle">
       Automated daily sweeping of verified ATS boards, 0-token deterministic B2C filtering, and real-time IMAP email sync for Aviral Singhal.
     </p>
-
-    <div style="display: flex; justify-content: center; gap: 12px;">
-      <button class="btn-notion-primary" onclick="triggerManualSweep()">
-        <i class="fa-solid fa-play"></i> Run Daily Sweep Batch
-      </button>
-      <button class="btn-notion-secondary-dark" onclick="syncEmailNow()">
-        <i class="fa-regular fa-envelope"></i> Sync Email Status (IMAP)
-      </button>
-    </div>
   </header>
 
   <!-- Notion Embedded Workspace Mockup Card -->
   <main class="workspace-mockup-wrapper">
     <div class="workspace-mockup-card">
 
-      <!-- Live Performance Stat Tiles -->
+      <!-- Performance Stat Tiles -->
       <div class="notion-stats-grid">
         <div class="stat-tile">
-          <div class="stat-label"><i class="fa-solid fa-satellite-dish text-primary"></i> Jobs Swept</div>
+          <div class="stat-label">Jobs Swept</div>
           <div class="stat-number" id="statSwept">18</div>
           <div class="stat-subtext">Direct ATS Ingestion (0 LLM Tokens)</div>
         </div>
 
         <div class="stat-tile">
-          <div class="stat-label"><i class="fa-solid fa-compress text-success"></i> Headroom Saved</div>
+          <div class="stat-label">Headroom Saved</div>
           <div class="stat-number" id="statSaved">74.2%</div>
           <div class="stat-subtext">CCR Reversible Context Crusher</div>
         </div>
 
         <div class="stat-tile">
-          <div class="stat-label"><i class="fa-solid fa-inbox text-warning"></i> Staged Queue</div>
+          <div class="stat-label">Staged Queue</div>
           <div class="stat-number" id="statStaged">1</div>
           <div class="stat-subtext">Avg 98% Match (Needs 1-Click)</div>
         </div>
 
         <div class="stat-tile">
-          <div class="stat-label"><i class="fa-solid fa-check-double text-info"></i> Applied & Synced</div>
+          <div class="stat-label">Applied & Synced</div>
           <div class="stat-number" id="statApplied">1</div>
           <div class="stat-subtext">Live IMAP Confirmation Sync</div>
         </div>
@@ -526,7 +420,7 @@
       <!-- Demo Alert Notice -->
       <div id="demoNotice" class="notion-yellow-banner" style="display: none;">
         <div>
-          <strong>🛡️ Interview Mode Active:</strong> Sensitive numbers, company names, URLs, and personal contact info are replaced with anonymized production equivalents.
+          <strong>🛡️ Interview Mode Active:</strong> Proprietary company names, live URLs, personal contact details, and sensitive metrics are redacted.
         </div>
         <span class="tag-purple">VERIFIED PROOF</span>
       </div>
@@ -542,15 +436,9 @@
               <i class="fa-solid fa-table-list"></i> Full Application Tracker
             </div>
           </div>
-
-          <div style="display: flex; gap: 8px;">
-            <button class="btn-notion-outline" onclick="exportCSV()">
-              <i class="fa-solid fa-download"></i> Export
-            </button>
-          </div>
         </div>
 
-        <!-- Staged Jobs Table -->
+        <!-- Staged Table -->
         <div id="stagedTableView">
           <table class="notion-table">
             <thead>
@@ -569,7 +457,7 @@
           </table>
         </div>
 
-        <!-- Full Tracker Table -->
+        <!-- Tracker Table -->
         <div id="trackerTableView" style="display: none;">
           <table class="notion-table">
             <thead>
@@ -594,54 +482,13 @@
   </main>
 
   <footer style="text-align: center; padding: 48px 24px; color: var(--steel); font-size: 13px;">
-    Antigravity Agent Architecture · Headroom Local Context Layer · Designed following Notion Humanist System
+    Antigravity Agent Architecture · Headroom Local Context Layer · OAuth Gate: singhalaviral321-lang
   </footer>
 
   <script>
-    const AUTHORIZED_USER = "singhalaviral321-lang";
-    // SHA-256 Hash of default master secret ('aviral-agent-2026')
-    const MASTER_KEY_HASH = "8d38865614eb9162957444c803df392cb3e45f94b3952fbe27f919d363d66664";
+    const REQUIRED_GITHUB_USER = "singhalaviral321-lang";
 
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    async function verifyCryptographicKey() {
-      const input = document.getElementById("ownerKeyInput").value.trim();
-      if (!input) {
-        alert("Please enter your Master Passkey or GitHub Access Token.");
-        return;
-      }
-      
-      const hashed = await sha256(input);
-      // Valid if matches master secret or GitHub Personal Access Token
-      if (hashed === MASTER_KEY_HASH || input.startsWith("ghp_") || input === "aviral-agent-2026") {
-        localStorage.setItem("agent_auth_verified", "true");
-        localStorage.setItem("agent_oauth_user", AUTHORIZED_USER);
-        document.getElementById("gateScreen").style.display = "none";
-        renderNavUser();
-        render();
-      } else {
-        alert("❌ Unauthorized: Key mismatch. Knowing the username alone does not grant access.");
-      }
-    }
-
-    function initiateRealOAuth() {
-      // Redirects to real GitHub OAuth app if configured, or prompts for PAT
-      const clientId = prompt("Enter your GitHub OAuth App Client ID (or enter your Personal Access Token):", "");
-      if (clientId && clientId.startsWith("ghp_")) {
-        localStorage.setItem("agent_auth_verified", "true");
-        localStorage.setItem("agent_oauth_user", AUTHORIZED_USER);
-        document.getElementById("gateScreen").style.display = "none";
-        renderNavUser();
-        render();
-      } else if (clientId) {
-        window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=read:user`;
-      }
-    }
+    const REAL_DATA = {
       metrics: { swept: 18, compression: "74.2%", staged: 1, applied: 1 },
       staged: [
         {
@@ -715,28 +562,65 @@
     };
 
     let isDemo = false;
-    let isAuthenticated = false;
+    let authenticatedUser = null;
 
-    function checkStoredAuth() {
-      const isVerified = localStorage.getItem("agent_auth_verified");
-      const stored = localStorage.getItem("agent_oauth_user");
-      if (isVerified === "true" && stored === AUTHORIZED_USER) {
-        isAuthenticated = true;
-        document.getElementById("gateScreen").style.display = "none";
-        renderNavUser();
+    // Direct GitHub OAuth Token Verification (Calls api.github.com/user)
+    async function verifyGitHubToken(token) {
+      try {
+        const res = await fetch("https://api.github.com/user", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/vnd.github.v3+json"
+          }
+        });
+
+        if (!res.ok) {
+          throw new Error("Invalid GitHub Token or authorization expired");
+        }
+
+        const data = await res.json();
+        const login = data.login;
+
+        if (login.toLowerCase() === REQUIRED_GITHUB_USER.toLowerCase()) {
+          authenticatedUser = data;
+          sessionStorage.setItem("gh_verified_token", token);
+          sessionStorage.setItem("gh_user_login", login);
+          document.getElementById("gateScreen").style.display = "none";
+          renderNavUser();
+          render();
+          return true;
+        } else {
+          alert(`❌ Access Denied: You are signed in as '${login}'. Only '${REQUIRED_GITHUB_USER}' has permission to view this private workspace.`);
+          return false;
+        }
+      } catch (err) {
+        alert("GitHub Verification Error: " + err.message);
+        return false;
       }
     }
 
-    function authenticateUser() {
-      const input = prompt("Enter your GitHub Username for OAuth authentication:", "aviralsinghal");
-      if (input && input.trim().toLowerCase() === AUTHORIZED_USER) {
-        localStorage.setItem("agent_oauth_user", AUTHORIZED_USER);
-        isAuthenticated = true;
-        document.getElementById("gateScreen").style.display = "none";
-        renderNavUser();
-        render();
-      } else {
-        alert("Access Denied: Only the authorized repository owner can access private job data.");
+    async function authenticateWithGitHub() {
+      // Prompts user for their GitHub Auth Token / Personal Token generated via github.com/settings/tokens
+      const token = prompt("Paste your GitHub OAuth Personal Access Token (or token from gh auth token):", "");
+      if (token && token.trim()) {
+        const btn = document.getElementById("ghLoginBtn");
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying with GitHub API...`;
+        const success = await verifyGitHubToken(token.trim());
+        if (!success) {
+          btn.innerHTML = `<i class="fa-brands fa-github"></i> Authorize with GitHub (Official OAuth)`;
+        }
+      }
+    }
+
+    // Check if session token exists or check URL hash callback
+    async function checkExistingAuth() {
+      // 1. Check if token returned via OAuth redirect hash/query
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const queryParams = new URLSearchParams(window.location.search);
+      const token = hashParams.get("access_token") || queryParams.get("token") || sessionStorage.getItem("gh_verified_token");
+
+      if (token) {
+        await verifyGitHubToken(token);
       }
     }
 
@@ -745,23 +629,24 @@
       document.getElementById("demoCheckbox").checked = true;
       document.getElementById("gateScreen").style.display = "none";
       document.getElementById("navUserBadge").innerHTML = `<span class="tag-purple"><i class="fa-solid fa-user-ninja"></i> Interview Guest</span>`;
-      document.getElementById("authStatusText").innerText = "Interview Demo Mode";
+      document.getElementById("authStatusText").innerText = "Interview Demo Mode (Anonymized)";
       render();
     }
 
     function renderNavUser() {
+      if (!authenticatedUser) return;
       document.getElementById("navUserBadge").innerHTML = `
         <div style="display: flex; align-items: center; gap: 8px;">
-          <img src="https://github.com/${AUTHORIZED_USER}.png" width="28" height="28" style="border-radius: var(--radius-sm);" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
-          <span style="font-size: 13px; font-weight: 500;">${AUTHORIZED_USER}</span>
+          <img src="${authenticatedUser.avatar_url}" width="28" height="28" style="border-radius: var(--radius-sm);">
+          <span style="font-size: 13px; font-weight: 500;">${authenticatedUser.login}</span>
           <button class="btn-notion-outline" style="padding: 4px 8px; font-size: 11px;" onclick="logout()">Lock</button>
         </div>
       `;
-      document.getElementById("authStatusText").innerText = "Authenticated: " + AUTHORIZED_USER;
+      document.getElementById("authStatusText").innerText = "GitHub Authenticated: " + authenticatedUser.login;
     }
 
     function logout() {
-      localStorage.removeItem("agent_oauth_user");
+      sessionStorage.clear();
       location.reload();
     }
 
@@ -780,7 +665,7 @@
       document.getElementById("statApplied").innerText = data.metrics.applied;
       document.getElementById("stagedCountTag").innerText = data.staged.length;
 
-      // Render Staged
+      // Staged
       const stagedTbody = document.getElementById("stagedTableBody");
       if (data.staged.length === 0) {
         stagedTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--steel); padding: 32px;">All queued jobs approved! Next sweep scheduled at 08:00 AM.</td></tr>`;
@@ -810,7 +695,7 @@
         `).join("");
       }
 
-      // Render Tracker
+      // Tracker
       const trackerTbody = document.getElementById("trackerTableBody");
       trackerTbody.innerHTML = data.tracker.map(t => {
         let tagClass = "tag-sky";
@@ -840,7 +725,7 @@
           company: approved.company,
           title: approved.title,
           status: "applied",
-          appliedBy: "Aviral (v0 1-Click)",
+          appliedBy: authenticatedUser ? authenticatedUser.login : "Aviral",
           date: new Date().toISOString().split("T")[0],
           notes: "Approved via Notion UI Workspace. IMAP sync scanning."
         });
@@ -857,20 +742,8 @@
       document.getElementById("trackerTableView").style.display = tab === "tracker" ? "block" : "none";
     }
 
-    function triggerManualSweep() {
-      alert("Triggering sweep batch across target ATS boards (Zepto, CRED, Swiggy, FamPay, Groww)... Check terminal console for real-time progress.");
-    }
-
-    function syncEmailNow() {
-      alert("Syncing IMAP inbox for application responses... Any new status updates will appear in the tracker.");
-    }
-
-    function exportCSV() {
-      alert("Exporting tracker database to CSV...");
-    }
-
-    // Init
-    checkStoredAuth();
+    // Run Auth Verification
+    checkExistingAuth();
     render();
   </script>
 </body>
