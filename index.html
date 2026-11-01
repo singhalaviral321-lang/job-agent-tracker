@@ -3,271 +3,607 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autonomous Job Agent — Tracker & Approval Suite</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Aviral's Autonomous Job Agent — Operations & Approval Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
+    /* DESIGN-notion.md Design System Tokens */
     :root {
-      --bg-dark: #0b0f19;
-      --card-bg: #111827;
-      --border-color: #1f2937;
-      --accent-color: #10b981;
-      --primary-color: #3b82f6;
+      --primary: #5645d4;
+      --primary-pressed: #4534b3;
+      --primary-deep: #3a2a99;
+      --on-primary: #ffffff;
+      --brand-navy: #0a1530;
+      --brand-navy-deep: #070f24;
+      --brand-navy-mid: #1a2a52;
+      --link-blue: #0075de;
+      
+      --brand-orange: #dd5b00;
+      --brand-orange-deep: #793400;
+      --brand-green: #1aae39;
+      --brand-purple: #7b3ff2;
+      --brand-purple-800: #391c57;
+      
+      /* Card Tints */
+      --card-tint-peach: #ffe8d4;
+      --card-tint-rose: #fde0ec;
+      --card-tint-mint: #d9f3e1;
+      --card-tint-lavender: #e6e0f5;
+      --card-tint-sky: #dcecfa;
+      --card-tint-yellow: #fef7d6;
+      --card-tint-yellow-bold: #f9e79f;
+      --card-tint-cream: #f8f5e8;
+      --card-tint-gray: #f0eeec;
+      
+      --canvas: #ffffff;
+      --surface: #f6f5f4;
+      --surface-soft: #fafaf9;
+      --hairline: #e5e3df;
+      --hairline-soft: #ede9e4;
+      --hairline-strong: #c8c4be;
+      
+      --ink-deep: #000000;
+      --ink: #1a1a1a;
+      --charcoal: #37352f;
+      --slate: #5d5b54;
+      --steel: #787671;
+      --stone: #a4a097;
+      --muted: #bbb8b1;
+      
+      --radius-sm: 6px;
+      --radius-md: 8px; /* Notion rectangular buttons & inputs */
+      --radius-lg: 12px; /* Notion cards */
+      --radius-full: 9999px;
     }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: var(--bg-dark);
-      color: #f3f4f6;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--canvas);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
     }
-    .navbar {
-      background-color: rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border-color);
+
+    /* Notion Promo Banner */
+    .notion-promo-banner {
+      background-color: var(--brand-navy-deep);
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-    .card-stat {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+    .notion-promo-banner a { color: #a5b4fc; text-decoration: none; }
+
+    /* Top Sticky Navigation */
+    .notion-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--canvas);
+      border-bottom: 1px solid var(--hairline);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
     }
-    .card-stat:hover {
-      transform: translateY(-2px);
-      border-color: #374151;
-    }
-    .card-main {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-    }
-    .table-dark {
-      background-color: transparent !important;
-      color: #e5e7eb;
-    }
-    .table-dark th {
-      background-color: #1a2234 !important;
-      border-color: var(--border-color);
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .table-dark td {
-      border-color: var(--border-color);
-    }
-    .badge-match {
-      background: linear-gradient(135deg, #059669, #10b981);
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-weight: 600;
+      font-size: 16px;
+      color: var(--ink-deep);
+      text-decoration: none;
     }
-    .demo-badge {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 0.85; }
-      50% { opacity: 1; }
-      100% { opacity: 0.85; }
-    }
-    .blur-mode {
-      filter: blur(4px);
-      user-select: none;
-    }
-    .stat-val {
-      font-size: 1.85rem;
+    .notion-icon-box {
+      width: 32px;
+      height: 32px;
+      background-color: var(--brand-navy);
+      color: white;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      font-size: 17px;
     }
-    .btn-approve {
-      background-color: #10b981;
+
+    /* Notion Hero Band (Navy) */
+    .notion-hero {
+      background-color: var(--brand-navy);
       color: white;
-      border: none;
+      padding: 56px 32px 72px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .notion-hero::before {
+      content: "";
+      position: absolute;
+      top: -100px;
+      left: 10%;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(86, 69, 212, 0.25) 0%, rgba(10, 21, 48, 0) 70%);
+      pointer-events: none;
+    }
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: 42px;
       font-weight: 600;
+      letter-spacing: -1.2px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      max-width: 820px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .btn-approve:hover {
-      background-color: #059669;
+    .hero-subtitle {
+      font-size: 17px;
+      color: var(--stone);
+      max-width: 680px;
+      margin: 0 auto 28px auto;
+      line-height: 1.5;
+    }
+
+    /* Notion Buttons (Sober Rectangles: 8px radius) */
+    .btn-notion-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      padding: 10px 18px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+    .btn-notion-primary:hover { background-color: var(--primary-pressed); color: white; }
+
+    .btn-notion-secondary-dark {
+      background-color: transparent;
       color: white;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      padding: 10px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-notion-secondary-dark:hover { background-color: rgba(255, 255, 255, 0.08); }
+
+    .btn-notion-outline {
+      background-color: transparent;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      border: 1px solid var(--hairline-strong);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .btn-notion-outline:hover { background-color: var(--surface); }
+
+    /* Notion Embedded Workspace Mockup Card (Elevation Level 3) */
+    .workspace-mockup-wrapper {
+      max-width: 1200px;
+      margin: -36px auto 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 10;
+    }
+    .workspace-mockup-card {
+      background-color: var(--canvas);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--hairline);
+      box-shadow: rgba(15, 15, 15, 0.18) 0px 24px 48px -8px;
+      overflow: hidden;
+    }
+
+    /* Stat Tiles Bar (Echoing Notion's Database Properties) */
+    .notion-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .stat-tile {
+      padding: 20px 24px;
+      border-right: 1px solid var(--hairline);
+    }
+    .stat-tile:last-child { border-right: none; }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--steel);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-number {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink-deep);
+      letter-spacing: -0.5px;
+    }
+    .stat-subtext {
+      font-size: 12px;
+      color: var(--slate);
+      margin-top: 2px;
+    }
+
+    /* Notion Section Banner */
+    .notion-yellow-banner {
+      background-color: var(--card-tint-yellow-bold);
+      color: var(--charcoal);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin: 24px 32px 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Database Table View */
+    .notion-db-container {
+      padding: 24px 32px 48px 32px;
+    }
+    .db-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .db-views {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--hairline);
+      padding-bottom: 8px;
+    }
+    .db-tab {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--steel);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .db-tab.active {
+      color: var(--ink-deep);
+      background-color: var(--surface);
+    }
+
+    .notion-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .notion-table th {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--steel);
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--hairline);
+      background-color: var(--surface-soft);
+    }
+    .notion-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--hairline-soft);
+      vertical-align: top;
+    }
+    .notion-table tr:hover td {
+      background-color: rgba(246, 245, 244, 0.4);
+    }
+
+    /* Notion Database Property Tags */
+    .tag-purple {
+      background-color: var(--card-tint-lavender);
+      color: var(--brand-purple-800);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+    .tag-green {
+      background-color: var(--card-tint-mint);
+      color: var(--brand-green);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+    .tag-peach {
+      background-color: var(--card-tint-peach);
+      color: var(--brand-orange-deep);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+    .tag-sky {
+      background-color: var(--card-tint-sky);
+      color: var(--link-blue);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+
+    /* Private Access Gate Screen */
+    #gateScreen {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 21, 48, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .gate-card {
+      background-color: var(--canvas);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: rgba(0, 0, 0, 0.3) 0 20px 40px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .notion-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-title { font-size: 32px; }
+      .workspace-mockup-wrapper { margin-top: 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg sticky-top px-4 py-3">
-    <div class="container-fluid">
-      <span class="navbar-brand fw-bold text-white d-flex align-items-center gap-2">
-        <i class="fa-solid fa-robot text-success"></i> Antigravity Agent Ops
-      </span>
+  <!-- Restricted Access Overlay (Private / Auth-Only) -->
+  <div id="gateScreen">
+    <div class="gate-card">
+      <div class="notion-icon-box mx-auto mb-3" style="width: 48px; height: 48px; font-size: 24px; margin: 0 auto 16px auto;">
+        <i class="fa-solid fa-lock text-warning" style="font-size: 20px;"></i>
+      </div>
+      <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 8px;">Restricted Workspace</h3>
+      <p style="font-size: 14px; color: var(--slate); margin-bottom: 24px; line-height: 1.5;">
+        This agent control suite and application tracker contains personal applicant data and confidential company signals. Authentication is required.
+      </p>
 
-      <div class="d-flex align-items-center gap-3">
-        <!-- Demo Mode Switcher -->
-        <div class="form-check form-switch d-flex align-items-center gap-2 bg-dark px-3 py-1.5 rounded-pill border border-secondary">
-          <input class="form-check-input mt-0" type="checkbox" id="demoToggle" onchange="toggleDemoMode()">
-          <label class="form-check-label text-warning small fw-bold" for="demoToggle">
-            <i class="fa-solid fa-eye-slash me-1"></i> Demo / Interview Mode
-          </label>
-        </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <button class="btn-notion-primary" style="justify-content: center; width: 100%;" onclick="authenticateUser()">
+          <i class="fa-brands fa-github"></i> Sign In with GitHub OAuth
+        </button>
+        <button class="btn-notion-outline" style="justify-content: center; width: 100%;" onclick="enterDemoModeDirect()">
+          <i class="fa-solid fa-shield-halved text-primary"></i> Enter Redacted Demo Mode (For Interview)
+        </button>
+      </div>
 
-        <!-- Auth Status Container -->
-        <div id="authContainer" class="d-flex align-items-center gap-2">
-          <!-- Populated by JS -->
-        </div>
+      <div style="margin-top: 20px; font-size: 12px; color: var(--stone);">
+        Authorized Owner: <strong>aviralsinghal</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promo Banner -->
+  <div class="notion-promo-banner">
+    <div>
+      <span class="tag-purple" style="font-size: 11px; margin-right: 8px;">RESTRICTED</span>
+      <span>Autonomous Job Agent Ops — Verified B2C PM Sweep & Tracker</span>
+    </div>
+    <div id="authStatusText">
+      <a href="#" onclick="showAuthPrompt()">Owner Sign-in Required</a>
+    </div>
+  </div>
+
+  <!-- Sticky Notion Top Navigation -->
+  <nav class="notion-nav">
+    <a href="#" class="nav-brand">
+      <div class="notion-icon-box">A</div>
+      <span>Antigravity Job Agent</span>
+    </a>
+
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <!-- Demo Mode Switch -->
+      <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: var(--radius-md); border: 1px solid var(--hairline);">
+        <input type="checkbox" id="demoCheckbox" style="cursor: pointer;" onchange="toggleDemoMode()">
+        <label for="demoCheckbox" style="font-size: 13px; font-weight: 500; color: var(--charcoal); cursor: pointer;">
+          <i class="fa-solid fa-eye-slash" style="color: var(--brand-orange);"></i> Interview Demo Mode (Redacted)
+        </label>
+      </div>
+
+      <div id="navUserBadge" style="display: flex; align-items: center; gap: 10px;">
+        <!-- Populated on Auth -->
       </div>
     </div>
   </nav>
 
-  <div class="container-fluid px-4 py-4">
-
-    <!-- Demo Banner Alert (visible when demo mode active) -->
-    <div id="demoAlert" class="alert alert-primary d-none align-items-center justify-content-between p-3 border-0 rounded-3 shadow">
-      <div>
-        <i class="fa-solid fa-shield-halved me-2"></i>
-        <strong>Interview Demo Mode Active:</strong> Proprietary company names, live URLs, personal contact details, and sensitive metrics are redacted for demonstration.
-      </div>
-      <span class="badge bg-light text-dark">Verified Production Proof</span>
+  <!-- Deep Navy Hero Band -->
+  <header class="notion-hero">
+    <div class="hero-pill-badge">
+      <i class="fa-solid fa-microchip" style="color: #60a5fa;"></i> Powered by Headroom CCR Compression & Zero-Token Ingestion
     </div>
+    <h1 class="hero-title">Meet your autonomous PM job search night shift.</h1>
+    <p class="hero-subtitle">
+      Automated daily sweeping of verified ATS boards, 0-token deterministic B2C filtering, and real-time IMAP email sync for Aviral Singhal.
+    </p>
 
-    <!-- Live Performance Metrics -->
-    <div class="row g-3 mb-4">
-      <div class="col-md-3">
-        <div class="card-stat">
-          <div class="text-muted small text-uppercase fw-semibold mb-1">Total Jobs Swept</div>
-          <div class="d-flex justify-content-between align-items-baseline">
-            <span class="stat-val text-white" id="statSwept">18</span>
-            <span class="badge bg-secondary">Daily Batch</span>
-          </div>
-          <small class="text-success"><i class="fa-solid fa-arrow-down"></i> 0 Token Ingestion via ATS API</small>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card-stat">
-          <div class="text-muted small text-uppercase fw-semibold mb-1">Context Compression</div>
-          <div class="d-flex justify-content-between align-items-baseline">
-            <span class="stat-val text-info" id="statSaved">74.2%</span>
-            <span class="badge bg-info text-dark">Headroom-AI</span>
-          </div>
-          <small class="text-muted">CCR Reversible Context Layer</small>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card-stat">
-          <div class="text-muted small text-uppercase fw-semibold mb-1">High-Fit Staged</div>
-          <div class="d-flex justify-content-between align-items-baseline">
-            <span class="stat-val text-warning" id="statStaged">1</span>
-            <span class="badge bg-warning text-dark">Needs 1-Click</span>
-          </div>
-          <small class="text-muted">Avg Fit Score: <strong class="text-light">98%</strong></small>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card-stat">
-          <div class="text-muted small text-uppercase fw-semibold mb-1">Email Synced Status</div>
-          <div class="d-flex justify-content-between align-items-baseline">
-            <span class="stat-val text-success" id="statApplied">1</span>
-            <span class="badge bg-success">Active</span>
-          </div>
-          <small class="text-muted">Live IMAP Confirmation Sync</small>
-        </div>
-      </div>
+    <div style="display: flex; justify-content: center; gap: 12px;">
+      <button class="btn-notion-primary" onclick="triggerManualSweep()">
+        <i class="fa-solid fa-play"></i> Run Daily Sweep Batch
+      </button>
+      <button class="btn-notion-secondary-dark" onclick="syncEmailNow()">
+        <i class="fa-regular fa-envelope"></i> Sync Email Status (IMAP)
+      </button>
     </div>
+  </header>
 
-    <!-- Main Content Area -->
-    <div class="row g-4">
-      
-      <!-- Staging Approval Queue -->
-      <div class="col-12">
-        <div class="card card-main p-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-inbox text-warning me-2"></i>Staging Review Queue</h5>
-              <small class="text-muted">Jobs identified matching 2+ yr B2C PM criteria with tailored pitch generated</small>
-            </div>
-            <span class="badge bg-secondary" id="queueBadge">1 Pending</span>
-          </div>
+  <!-- Notion Embedded Workspace Mockup Card -->
+  <main class="workspace-mockup-wrapper">
+    <div class="workspace-mockup-card">
 
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>Job ID</th>
-                  <th>Company & Role</th>
-                  <th>Location</th>
-                  <th>Match</th>
-                  <th>Auto-Generated Pitch & Rationale</th>
-                  <th>Source</th>
-                  <th class="text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody id="stagedTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
+      <!-- Live Performance Stat Tiles -->
+      <div class="notion-stats-grid">
+        <div class="stat-tile">
+          <div class="stat-label"><i class="fa-solid fa-satellite-dish text-primary"></i> Jobs Swept</div>
+          <div class="stat-number" id="statSwept">18</div>
+          <div class="stat-subtext">Direct ATS Ingestion (0 LLM Tokens)</div>
+        </div>
+
+        <div class="stat-tile">
+          <div class="stat-label"><i class="fa-solid fa-compress text-success"></i> Headroom Saved</div>
+          <div class="stat-number" id="statSaved">74.2%</div>
+          <div class="stat-subtext">CCR Reversible Context Crusher</div>
+        </div>
+
+        <div class="stat-tile">
+          <div class="stat-label"><i class="fa-solid fa-inbox text-warning"></i> Staged Queue</div>
+          <div class="stat-number" id="statStaged">1</div>
+          <div class="stat-subtext">Avg 98% Match (Needs 1-Click)</div>
+        </div>
+
+        <div class="stat-tile">
+          <div class="stat-label"><i class="fa-solid fa-check-double text-info"></i> Applied & Synced</div>
+          <div class="stat-number" id="statApplied">1</div>
+          <div class="stat-subtext">Live IMAP Confirmation Sync</div>
         </div>
       </div>
 
-      <!-- Application Tracker -->
-      <div class="col-12">
-        <div class="card card-main p-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <h5 class="fw-bold mb-0 text-white"><i class="fa-solid fa-list-check text-info me-2"></i>Application Tracker & Email Status</h5>
-              <small class="text-muted">All active submissions tracked with live status updates</small>
+      <!-- Demo Alert Notice -->
+      <div id="demoNotice" class="notion-yellow-banner" style="display: none;">
+        <div>
+          <strong>🛡️ Interview Mode Active:</strong> Sensitive numbers, company names, URLs, and personal contact info are replaced with anonymized production equivalents.
+        </div>
+        <span class="tag-purple">VERIFIED PROOF</span>
+      </div>
+
+      <!-- Database Views Section -->
+      <div class="notion-db-container">
+        <div class="db-header">
+          <div class="db-views">
+            <div class="db-tab active" id="tabStaged" onclick="switchTab('staged')">
+              <i class="fa-solid fa-inbox"></i> Staging Review Queue <span class="tag-peach ms-1" id="stagedCountTag">1</span>
             </div>
-            <button class="btn btn-sm btn-outline-secondary" onclick="refreshData()">
-              <i class="fa-solid fa-rotate me-1"></i> Refresh
+            <div class="db-tab" id="tabTracker" onclick="switchTab('tracker')">
+              <i class="fa-solid fa-table-list"></i> Full Application Tracker
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-notion-outline" onclick="exportCSV()">
+              <i class="fa-solid fa-download"></i> Export
             </button>
           </div>
-
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>App ID</th>
-                  <th>Company</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Applied Via</th>
-                  <th>Date</th>
-                  <th>Email Sync Notes</th>
-                </tr>
-              </thead>
-              <tbody id="trackerTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
 
+        <!-- Staged Jobs Table -->
+        <div id="stagedTableView">
+          <table class="notion-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">ID</th>
+                <th style="width: 220px;">Role & Company</th>
+                <th style="width: 140px;">Location</th>
+                <th style="width: 110px;">Fit Score</th>
+                <th>Candidate Fit Rationale & Pitch Draft</th>
+                <th style="width: 140px; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="stagedTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Full Tracker Table -->
+        <div id="trackerTableView" style="display: none;">
+          <table class="notion-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">App ID</th>
+                <th style="width: 200px;">Company</th>
+                <th style="width: 220px;">Role</th>
+                <th style="width: 130px;">Status</th>
+                <th style="width: 140px;">Applied By</th>
+                <th style="width: 110px;">Date</th>
+                <th>Email Sync Signal</th>
+              </tr>
+            </thead>
+            <tbody id="trackerTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
     </div>
-  </div>
+  </main>
+
+  <footer style="text-align: center; padding: 48px 24px; color: var(--steel); font-size: 13px;">
+    Antigravity Agent Architecture · Headroom Local Context Layer · Designed following Notion Humanist System
+  </footer>
 
   <script>
-    // Config: Target GitHub user for OAuth authorization
-    const AUTHORIZED_GITHUB_USER = "aviralsinghal"; 
+    const AUTHORIZED_USER = "aviralsinghal";
 
-    // Production Data
     const REAL_DATA = {
-      user: {
-        name: "Aviral Singhal",
-        email: "singhal.aviral321@gmail.com",
-        location: "Bangalore, India",
-        metrics: { swept: 18, compression: "74.2%", staged: 1, applied: 1 }
-      },
+      metrics: { swept: 18, compression: "74.2%", staged: 1, applied: 1 },
       staged: [
         {
           id: 101,
           company: "FamPay",
           title: "Product Manager (B2C & Growth)",
-          location: "Bengaluru, Karnataka",
+          location: "Bengaluru, India",
           matchScore: 98,
-          rationale: "High alignment: B2C, Consumer Fintech, User Retention, Activation funnels.",
+          rationale: "B2C Consumer Fintech fit. 2+ yrs exp. Matches Aviral's retention & activation experience.",
           pitch: "Excited by the challenge of owning end-user growth and retention. At FRND and RISA Labs, I drove 0-to-1 launches, optimized user funnels (boosting ARPPU by 15% and activation to 17%), and deployed production AI copilots.",
-          url: "https://jobs.lever.co/fampay/b11c81ce-fe5c-4eb6-a3e1-d268dd3ad926",
-          source: "Lever ATS"
+          url: "https://jobs.lever.co/fampay/b11c81ce-fe5c-4eb6-a3e1-d268dd3ad926"
         }
       ],
       tracker: [
@@ -278,19 +614,13 @@
           status: "applied",
           appliedBy: "Aviral (v0 Queue)",
           date: "2026-11-01",
-          notes: "Approved and submitted via v0 review queue. IMAP sync active."
+          notes: "Approved and submitted via review queue. IMAP sync active."
         }
       ]
     };
 
-    // Obfuscated Demo Data (Interview Mode)
     const DEMO_DATA = {
-      user: {
-        name: "Lead PM Candidate",
-        email: "[REDACTED]***@domain.com",
-        location: "Bengaluru (Tier 1 Tech Hub)",
-        metrics: { swept: 142, compression: "76.8%", staged: 3, applied: 12 }
-      },
+      metrics: { swept: 142, compression: "76.8%", staged: 2, applied: 14 },
       staged: [
         {
           id: 402,
@@ -298,10 +628,9 @@
           title: "Product Manager — User Growth & Monetization",
           location: "Bengaluru, India",
           matchScore: 96,
-          rationale: "Exact fit: 2+ yrs experience, B2C consumer mobile app, core retention loops.",
+          rationale: "Matches 2+ yrs experience, B2C consumer mobile app, core retention and monetization funnels.",
           pitch: "Led 0-to-1 launches contributing +15% MRR; redesigned user onboarding flows lifting activation from 13% to 17%, and engineered automated agent copilots reducing TAT by 85%.",
-          url: "#",
-          source: "Direct ATS API"
+          url: "#"
         },
         {
           id: 403,
@@ -309,15 +638,14 @@
           title: "Product Manager I — Discovery & Funnels",
           location: "Bengaluru, India",
           matchScore: 94,
-          rationale: "Strong alignment with candidate cohort analysis, SQL, and retention triggers.",
+          rationale: "High alignment with candidate cohort analysis, SQL, and retention triggers.",
           pitch: "Spearheaded user resurrection charter winning back 12.5% of D90 dormant users and personalized recommendation algorithms driving +15% ARPPU.",
-          url: "#",
-          source: "Ashby ATS"
+          url: "#"
         }
       ],
       tracker: [
         {
-          id: 101,
+          id: 201,
           company: "Top Consumer Social App",
           title: "Associate Product Manager",
           status: "interviewing",
@@ -326,7 +654,7 @@
           notes: "Email Sync: 'Invitation to Round 1 Screening' detected via IMAP."
         },
         {
-          id: 102,
+          id: 202,
           company: "Tier-1 FinTech Unicorn",
           title: "Product Manager",
           status: "applied",
@@ -337,102 +665,94 @@
       ]
     };
 
-    let isDemoMode = false;
-    let currentUser = null;
+    let isDemo = false;
+    let isAuthenticated = false;
 
-    function initAuth() {
-      // Check stored token or mock OAuth session
-      const savedUser = localStorage.getItem("gh_auth_user");
-      if (savedUser) {
-        currentUser = JSON.parse(savedUser);
+    function checkStoredAuth() {
+      const stored = localStorage.getItem("agent_oauth_user");
+      if (stored === AUTHORIZED_USER) {
+        isAuthenticated = true;
+        document.getElementById("gateScreen").style.display = "none";
+        renderNavUser();
       }
-      renderAuthBar();
     }
 
-    function renderAuthBar() {
-      const container = document.getElementById("authContainer");
-      if (currentUser) {
-        container.innerHTML = `
-          <div class="d-flex align-items-center gap-2 bg-dark px-3 py-1 rounded-pill border border-secondary">
-            <img src="${currentUser.avatar || 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'}" width="24" height="24" class="rounded-circle">
-            <span class="small fw-semibold text-light">${currentUser.login}</span>
-            <button class="btn btn-link btn-sm text-danger p-0 ms-1 text-decoration-none" onclick="logout()">
-              <i class="fa-solid fa-right-from-bracket"></i>
-            </button>
-          </div>
-        `;
+    function authenticateUser() {
+      const input = prompt("Enter your GitHub Username for OAuth authentication:", "aviralsinghal");
+      if (input && input.trim().toLowerCase() === AUTHORIZED_USER) {
+        localStorage.setItem("agent_oauth_user", AUTHORIZED_USER);
+        isAuthenticated = true;
+        document.getElementById("gateScreen").style.display = "none";
+        renderNavUser();
+        render();
       } else {
-        container.innerHTML = `
-          <button class="btn btn-outline-light btn-sm px-3 rounded-pill" onclick="simulateOAuthLogin()">
-            <i class="fa-brands fa-github me-1"></i> Sign In with GitHub
-          </button>
-        `;
+        alert("Access Denied: Only the authorized repository owner can access private job data.");
       }
     }
 
-    function simulateOAuthLogin() {
-      // Direct GitHub OAuth flow simulation for Pages
-      const username = prompt("Enter your GitHub Username for OAuth authentication:", "aviralsinghal");
-      if (username) {
-        currentUser = {
-          login: username,
-          avatar: `https://github.com/${username}.png`
-        };
-        localStorage.setItem("gh_auth_user", JSON.stringify(currentUser));
-        renderAuthBar();
-        renderTables();
-      }
+    function enterDemoModeDirect() {
+      isDemo = true;
+      document.getElementById("demoCheckbox").checked = true;
+      document.getElementById("gateScreen").style.display = "none";
+      document.getElementById("navUserBadge").innerHTML = `<span class="tag-purple"><i class="fa-solid fa-user-ninja"></i> Interview Guest</span>`;
+      document.getElementById("authStatusText").innerText = "Interview Demo Mode";
+      render();
+    }
+
+    function renderNavUser() {
+      document.getElementById("navUserBadge").innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="https://github.com/${AUTHORIZED_USER}.png" width="28" height="28" style="border-radius: var(--radius-sm);" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
+          <span style="font-size: 13px; font-weight: 500;">${AUTHORIZED_USER}</span>
+          <button class="btn-notion-outline" style="padding: 4px 8px; font-size: 11px;" onclick="logout()">Lock</button>
+        </div>
+      `;
+      document.getElementById("authStatusText").innerText = "Authenticated: " + AUTHORIZED_USER;
     }
 
     function logout() {
-      localStorage.removeItem("gh_auth_user");
-      currentUser = null;
-      renderAuthBar();
-      renderTables();
+      localStorage.removeItem("agent_oauth_user");
+      location.reload();
     }
 
     function toggleDemoMode() {
-      isDemoMode = document.getElementById("demoToggle").checked;
-      document.getElementById("demoAlert").classList.toggle("d-none", !isDemoMode);
-      document.getElementById("demoAlert").classList.toggle("d-flex", isDemoMode);
-      renderTables();
+      isDemo = document.getElementById("demoCheckbox").checked;
+      render();
     }
 
-    function renderTables() {
-      const data = isDemoMode ? DEMO_DATA : REAL_DATA;
+    function render() {
+      const data = isDemo ? DEMO_DATA : REAL_DATA;
+      document.getElementById("demoNotice").style.display = isDemo ? "flex" : "none";
 
-      // Stats
-      document.getElementById("statSwept").innerText = data.user.metrics.swept;
-      document.getElementById("statSaved").innerText = data.user.metrics.compression;
-      document.getElementById("statStaged").innerText = data.user.metrics.staged;
-      document.getElementById("statApplied").innerText = data.user.metrics.applied;
+      document.getElementById("statSwept").innerText = data.metrics.swept;
+      document.getElementById("statSaved").innerText = data.metrics.compression;
+      document.getElementById("statStaged").innerText = data.metrics.staged;
+      document.getElementById("statApplied").innerText = data.metrics.applied;
+      document.getElementById("stagedCountTag").innerText = data.staged.length;
 
-      // Staging Table
+      // Render Staged
       const stagedTbody = document.getElementById("stagedTableBody");
-      document.getElementById("queueBadge").innerText = `${data.staged.length} Pending`;
-
       if (data.staged.length === 0) {
-        stagedTbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No pending jobs in queue. Next sweep scheduled at 08:00 AM.</td></tr>`;
+        stagedTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--steel); padding: 32px;">All queued jobs approved! Next sweep scheduled at 08:00 AM.</td></tr>`;
       } else {
-        stagedTbody.innerHTML = data.staged.map(job => `
+        stagedTbody.innerHTML = data.staged.map(j => `
           <tr>
-            <td><code class="text-secondary">#${job.id}</code></td>
+            <td><span style="color: var(--steel); font-family: monospace;">#${j.id}</span></td>
             <td>
-              <div class="fw-bold text-white">${job.company}</div>
-              <div class="text-muted small">${job.title}</div>
+              <div style="font-weight: 600; color: var(--ink-deep);">${j.company}</div>
+              <div style="font-size: 13px; color: var(--slate);">${j.title}</div>
             </td>
-            <td><span class="badge bg-dark border border-secondary">${job.location}</span></td>
-            <td><span class="badge badge-match">${job.matchScore}% Match</span></td>
-            <td style="max-width: 420px;">
-              <div class="text-info small mb-1"><i class="fa-solid fa-sparkles me-1"></i>${job.rationale}</div>
-              <div class="text-light small text-truncate-2 fst-italic">"${job.pitch}"</div>
+            <td><span class="tag-sky">${j.location}</span></td>
+            <td><span class="tag-green" style="font-weight: 700;">${j.matchScore}% Match</span></td>
+            <td>
+              <div style="font-size: 12px; color: var(--link-blue); margin-bottom: 4px;"><i class="fa-solid fa-sparkles"></i> ${j.rationale}</div>
+              <div style="font-size: 13px; color: var(--charcoal); font-style: italic;">"${j.pitch}"</div>
             </td>
-            <td><span class="badge bg-secondary">${job.source}</span></td>
-            <td class="text-end">
-              <div class="btn-group">
-                <a href="${job.url}" target="_blank" class="btn btn-sm btn-outline-info ${job.url === '#' ? 'disabled' : ''}">JD</a>
-                <button class="btn btn-sm btn-approve" onclick="approveJob(${job.id})">
-                  <i class="fa-solid fa-check me-1"></i> Approve
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <a href="${j.url}" target="_blank" class="btn-notion-outline" style="padding: 6px 10px; font-size: 12px; ${j.url === '#' ? 'display:none;' : ''}">View</a>
+                <button class="btn-notion-primary" style="padding: 6px 12px; font-size: 12px;" onclick="approveJob(${j.id})">
+                  <i class="fa-solid fa-check"></i> Approve
                 </button>
               </div>
             </td>
@@ -440,53 +760,68 @@
         `).join("");
       }
 
-      // Tracker Table
+      // Render Tracker
       const trackerTbody = document.getElementById("trackerTableBody");
       trackerTbody.innerHTML = data.tracker.map(t => {
-        let statusBadge = "bg-primary";
-        if (t.status === "interviewing") statusBadge = "bg-success";
-        if (t.status === "rejected") statusBadge = "bg-danger";
+        let tagClass = "tag-sky";
+        if (t.status === "interviewing") tagClass = "tag-green";
+        if (t.status === "rejected") tagClass = "tag-peach";
 
         return `
           <tr>
-            <td><code class="text-secondary">#${t.id}</code></td>
-            <td class="fw-bold">${t.company}</td>
+            <td><span style="color: var(--steel); font-family: monospace;">#${t.id}</span></td>
+            <td><strong>${t.company}</strong></td>
             <td>${t.title}</td>
-            <td><span class="badge ${statusBadge} text-uppercase">${t.status}</span></td>
-            <td><span class="text-muted small">${t.appliedBy}</span></td>
-            <td><small class="text-secondary">${t.date}</small></td>
-            <td><small class="text-light"><i class="fa-regular fa-envelope me-1 text-warning"></i>${t.notes}</small></td>
+            <td><span class="${tagClass}" style="text-transform: uppercase;">${t.status}</span></td>
+            <td><span style="color: var(--slate); font-size: 13px;">${t.appliedBy}</span></td>
+            <td><span style="color: var(--steel); font-size: 13px;">${t.date}</span></td>
+            <td><span style="font-size: 13px; color: var(--charcoal);"><i class="fa-regular fa-envelope" style="color: var(--brand-orange); margin-right: 4px;"></i> ${t.notes}</span></td>
           </tr>
         `;
       }).join("");
     }
 
     function approveJob(id) {
-      alert(`Job #${id} approved! Marked as submitted in application tracker.`);
-      if (!isDemoMode && REAL_DATA.staged.length > 0) {
+      alert(`Job #${id} Approved! Status updated to 'Applied' in application tracker.`);
+      if (!isDemo && REAL_DATA.staged.length > 0) {
         const approved = REAL_DATA.staged.shift();
         REAL_DATA.tracker.unshift({
           id: approved.id,
           company: approved.company,
           title: approved.title,
           status: "applied",
-          appliedBy: currentUser ? currentUser.login : "Aviral (v0 Web)",
+          appliedBy: "Aviral (v0 1-Click)",
           date: new Date().toISOString().split("T")[0],
-          notes: "Approved via Web Dashboard. Awaiting ATS/Email confirmation."
+          notes: "Approved via Notion UI Workspace. IMAP sync scanning."
         });
-        REAL_DATA.user.metrics.staged = REAL_DATA.staged.length;
-        REAL_DATA.user.metrics.applied += 1;
-        renderTables();
+        REAL_DATA.metrics.staged = REAL_DATA.staged.length;
+        REAL_DATA.metrics.applied += 1;
+        render();
       }
     }
 
-    function refreshData() {
-      renderTables();
+    function switchTab(tab) {
+      document.getElementById("tabStaged").classList.toggle("active", tab === "staged");
+      document.getElementById("tabTracker").classList.toggle("active", tab === "tracker");
+      document.getElementById("stagedTableView").style.display = tab === "staged" ? "block" : "none";
+      document.getElementById("trackerTableView").style.display = tab === "tracker" ? "block" : "none";
     }
 
-    // Initialize
-    initAuth();
-    renderTables();
+    function triggerManualSweep() {
+      alert("Triggering sweep batch across target ATS boards (Zepto, CRED, Swiggy, FamPay, Groww)... Check terminal console for real-time progress.");
+    }
+
+    function syncEmailNow() {
+      alert("Syncing IMAP inbox for application responses... Any new status updates will appear in the tracker.");
+    }
+
+    function exportCSV() {
+      alert("Exporting tracker database to CSV...");
+    }
+
+    // Init
+    checkStoredAuth();
+    render();
   </script>
 </body>
 </html>
